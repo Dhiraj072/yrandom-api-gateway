@@ -6,11 +6,11 @@ import org.junit.Test;
 
 public class VideoControllerTest {
 
-  VideoController controller = new VideoController();
+  private VideoController controller = new VideoController();
 
   @Test
   public void testGetRandomVideo() {
 
-    assertEquals("name", controller.getRandomVideo().get(0).getName());
+    assertNotNull(controller.getRandomVideo());
   }
 }
