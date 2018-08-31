@@ -16,17 +16,21 @@ import com.google.api.services.youtube.model.SearchListResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class VideoSearch {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(VideoSearch.class);
+
   /**
    * Application name.
    */
-  private static final String APPLICATION_NAME = "API Sample";
+  private static final String APPLICATION_NAME = "yrandom";
 
   /**
    * Directory to store user credentials for this application.
@@ -57,14 +61,17 @@ public class VideoSearch {
    * If modifying these scopes, delete your previously saved credentials at
    * ~/.credentials/drive-java-quickstart
    */
-  private static final Collection<String> SCOPES = Arrays.asList(
+  private static final Collection<String> SCOPES = Collections.singletonList(
       "https://www.googleapis.com/auth/youtube.force-ssl https://www.googleapis.com/auth/youtubepartner");
 
   static {
+
     try {
+
       HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
       DATA_STORE_FACTORY = new FileDataStoreFactory(DATA_STORE_DIR);
     } catch (Throwable t) {
+
       t.printStackTrace();
       System.exit(1);
     }
@@ -76,6 +83,7 @@ public class VideoSearch {
    * @return an authorized Credential object.
    */
   private static Credential authorize() throws IOException {
+
     // Load client secrets.
     InputStream in = VideoSearch.class
         .getResourceAsStream("/client_secret.json");
@@ -90,8 +98,7 @@ public class VideoSearch {
         .build();
     Credential credential = new AuthorizationCodeInstalledApp(
         flow, new LocalServerReceiver()).authorize("user");
-    System.out.println(
-        "Credentials saved to " + DATA_STORE_DIR.getAbsolutePath());
+    LOGGER.debug("Credentials saved to {}", DATA_STORE_DIR.getAbsolutePath());
     return credential;
   }
 
@@ -115,6 +122,7 @@ public class VideoSearch {
     YouTube youtube = getYouTubeService();
 
     try {
+
       HashMap<String, String> parameters = new HashMap<>();
       parameters.put("part", "snippet");
       parameters.put("maxResults", "25");
@@ -122,31 +130,35 @@ public class VideoSearch {
       parameters.put("type", "");
 
       YouTube.Search.List searchListByKeywordRequest = youtube.search()
-          .list(parameters.get("part").toString());
+          .list(parameters.get("part"));
       if (parameters.containsKey("maxResults")) {
+
         searchListByKeywordRequest.setMaxResults(
-            Long.parseLong(parameters.get("maxResults").toString()));
+            Long.parseLong(parameters.get("maxResults")));
       }
 
-      if (parameters.containsKey("q") && parameters.get("q") != "") {
-        searchListByKeywordRequest.setQ(parameters.get("q").toString());
+      if (parameters.containsKey("q") && !parameters.get("q").equals("")) {
+
+        searchListByKeywordRequest.setQ(parameters.get("q"));
       }
 
-      if (parameters.containsKey("type") && parameters.get("type") != "") {
-        searchListByKeywordRequest.setType(parameters.get("type").toString());
+      if (parameters.containsKey("type") && !parameters.get("type").equals("")) {
+
+        searchListByKeywordRequest.setType(parameters.get("type"));
       }
 
       SearchListResponse response = searchListByKeywordRequest.execute();
-      System.out.println(response.getItems().get(0).getId().getVideoId());
-      System.out.println(response);
+      LOGGER.debug("First video id {}", response.getItems().get(0).getId().getVideoId());
+      LOGGER.debug("Full response {}", response);
 
 
     } catch (GoogleJsonResponseException e) {
+
       e.printStackTrace();
-      System.err.println(
-          "There was a service error: " + e.getDetails().getCode() + " : " + e
-              .getDetails().getMessage());
+      LOGGER.error("There was a service error: {} : {}",
+          e.getDetails().getCode(), e.getDetails().getMessage());
     } catch (Throwable t) {
+
       t.printStackTrace();
     }
   }
