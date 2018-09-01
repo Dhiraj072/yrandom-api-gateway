@@ -1,11 +1,10 @@
 package com.github.dhiraj072.yrandom.video;
 
-import static org.junit.Assert.*;
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-import org.junit.Before;
+import static org.junit.Assert.assertNotNull;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -13,18 +12,14 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class YoutubeManagerIntegrationTest {
 
-  private YoutubeManager youtubeManager;
-
-  @Before
-  public void init() throws IOException, GeneralSecurityException {
-
-    youtubeManager = new YoutubeManager();
-  }
+  @Autowired
+  YoutubeManager youtubeManager;
 
   @Test
   public void testReturnAGoodRandomVideo() {
 
     assertNotNull(youtubeManager.getRandomYoutubeVideo());
+    assertNotNull(youtubeManager.getRandomYoutubeVideo().getId());
   }
 
 }
