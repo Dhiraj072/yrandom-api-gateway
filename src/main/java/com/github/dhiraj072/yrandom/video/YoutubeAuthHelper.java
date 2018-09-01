@@ -58,10 +58,11 @@ class YoutubeAuthHelper {
    * API client service.
    *
    * @return an authorized API client service
+   * @param clientSecret
    */
-  private static YouTube getYouTubeService() throws IOException {
+  private static YouTube getYouTubeService(String clientSecret) throws IOException {
 
-    Credential credential = authorize();
+    Credential credential = authorize(clientSecret);
     return new YouTube.Builder(
         HTTP_TRANSPORT, JSON_FACTORY, credential)
         .setApplicationName(APPLICATION_NAME)
@@ -72,12 +73,13 @@ class YoutubeAuthHelper {
    * Creates an authorized Credential object.
    *
    * @return an authorized Credential object.
+   * @param clientSecret
    */
-  private static Credential authorize() throws IOException {
+  private static Credential authorize(String clientSecret) throws IOException {
 
     // Load client secrets.
     InputStream in = YoutubeManager.class
-        .getResourceAsStream("/client_secret.json");
+        .getResourceAsStream("/" + clientSecret);
     GoogleClientSecrets clientSecrets = GoogleClientSecrets
         .load(JSON_FACTORY, new InputStreamReader(in));
 
@@ -93,11 +95,11 @@ class YoutubeAuthHelper {
     return credential;
   }
 
-  static YouTube getAuthorizedYoutubeService()
+  static YouTube getAuthorizedYoutubeService(String clientSecret)
       throws IOException, GeneralSecurityException {
 
     HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
     DATA_STORE_FACTORY = new FileDataStoreFactory(DATA_STORE_DIR);
-    return getYouTubeService();
+    return getYouTubeService(clientSecret);
   }
 }

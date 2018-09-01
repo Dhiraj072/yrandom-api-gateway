@@ -1,5 +1,6 @@
 package com.github.dhiraj072.yrandom.video;
 
+import com.github.dhiraj072.yrandom.ConfigManager;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.SearchListResponse;
@@ -9,6 +10,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
@@ -21,9 +23,11 @@ class YoutubeManager {
   // Youtube API client service
   private static YouTube youtube;
 
-  YoutubeManager() throws IOException, GeneralSecurityException {
+  @Autowired
+  YoutubeManager(ConfigManager configManager) throws IOException, GeneralSecurityException {
 
-    youtube = YoutubeAuthHelper.getAuthorizedYoutubeService();
+    LOGGER.info("Using client secrets {}", configManager.getClientSecret());
+    youtube = YoutubeAuthHelper.getAuthorizedYoutubeService(configManager.getClientSecret());
   }
 
   Video getRandomYoutubeVideo() {

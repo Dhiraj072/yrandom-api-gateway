@@ -3,7 +3,7 @@
 !gradle/wrapper/gradle-wrapper.jar
 
 ### Secrets ###
-src/main/resources/client_secret.json
+src/main/resources/client_secret*.json
 
 ### STS ###
 .apt_generated

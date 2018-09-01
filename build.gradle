@@ -62,6 +62,7 @@ repositories {
 // Ensure that the HTML reports of unit and integration tests are written to different directories.
 tasks.withType(Test) {
     reports.html.setDestination(file("${reporting.baseDir}/${name}"))
+    environment SPRING_PROFILES_ACTIVE: environment.SPRING_PROFILES_ACTIVE ?: "dev"
 }
 
 dependencies {
