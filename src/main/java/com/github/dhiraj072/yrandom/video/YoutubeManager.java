@@ -13,19 +13,22 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.SearchListResponse;
+import com.google.api.services.youtube.model.Video;
+import com.google.api.services.youtube.model.VideoListResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.security.GeneralSecurityException;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-public class VideoSearch {
+class YoutubeManager {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(VideoSearch.class);
+  private static final Logger LOGGER = LoggerFactory
+      .getLogger(YoutubeManager.class);
 
   /**
    * Application name.
@@ -38,25 +41,18 @@ public class VideoSearch {
   private static final java.io.File DATA_STORE_DIR = new java.io.File(
       System.getProperty("user.home"), ".credentials/java-youtube-api-tests");
 
-  /**
-   * Global instance of the {@link FileDataStoreFactory}.
-   */
   private static FileDataStoreFactory DATA_STORE_FACTORY;
 
-  /**
-   * Global instance of the JSON factory.
-   */
   private static final JsonFactory JSON_FACTORY = JacksonFactory
       .getDefaultInstance();
 
-  /**
-   * Global instance of the HTTP transport.
-   */
   private static HttpTransport HTTP_TRANSPORT;
+
+  // Youtube API client service
+  private static YouTube youtube;
 
   /**
    * Global instance of the scopes required by this quickstart.
-   *
    *
    * If modifying these scopes, delete your previously saved credentials at
    * ~/.credentials/drive-java-quickstart
@@ -64,17 +60,11 @@ public class VideoSearch {
   private static final Collection<String> SCOPES = Collections.singletonList(
       "https://www.googleapis.com/auth/youtube.force-ssl https://www.googleapis.com/auth/youtubepartner");
 
-  static {
+  YoutubeManager() throws IOException, GeneralSecurityException {
 
-    try {
-
-      HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-      DATA_STORE_FACTORY = new FileDataStoreFactory(DATA_STORE_DIR);
-    } catch (Throwable t) {
-
-      t.printStackTrace();
-      System.exit(1);
-    }
+    HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+    DATA_STORE_FACTORY = new FileDataStoreFactory(DATA_STORE_DIR);
+    youtube = getYouTubeService();
   }
 
   /**
@@ -85,7 +75,7 @@ public class VideoSearch {
   private static Credential authorize() throws IOException {
 
     // Load client secrets.
-    InputStream in = VideoSearch.class
+    InputStream in = YoutubeManager.class
         .getResourceAsStream("/client_secret.json");
     GoogleClientSecrets clientSecrets = GoogleClientSecrets
         .load(JSON_FACTORY, new InputStreamReader(in));
@@ -108,7 +98,7 @@ public class VideoSearch {
    *
    * @return an authorized API client service
    */
-  private static YouTube getYouTubeService() throws IOException {
+  protected static YouTube getYouTubeService() throws IOException {
 
     Credential credential = authorize();
     return new YouTube.Builder(
@@ -117,41 +107,21 @@ public class VideoSearch {
         .build();
   }
 
-  public static void main(String[] args) throws IOException {
+  Video getRandomYoutubeVideo() {
 
-    YouTube youtube = getYouTubeService();
-
+    String videoId = "";
     try {
 
-      HashMap<String, String> parameters = new HashMap<>();
-      parameters.put("part", "snippet");
-      parameters.put("maxResults", "25");
-      parameters.put("q", "surfing");
-      parameters.put("type", "");
-
       YouTube.Search.List searchListByKeywordRequest = youtube.search()
-          .list(parameters.get("part"));
-      if (parameters.containsKey("maxResults")) {
-
-        searchListByKeywordRequest.setMaxResults(
-            Long.parseLong(parameters.get("maxResults")));
-      }
-
-      if (parameters.containsKey("q") && !parameters.get("q").equals("")) {
-
-        searchListByKeywordRequest.setQ(parameters.get("q"));
-      }
-
-      if (parameters.containsKey("type") && !parameters.get("type").equals("")) {
-
-        searchListByKeywordRequest.setType(parameters.get("type"));
-      }
+          .list("snippet");
+      searchListByKeywordRequest.setMaxResults((long) 1);
+      searchListByKeywordRequest.setQ("surfing");
+      searchListByKeywordRequest.setType("video");
 
       SearchListResponse response = searchListByKeywordRequest.execute();
-      LOGGER.debug("First video id {}", response.getItems().get(0).getId().getVideoId());
+      videoId = response.getItems().get(0).getId().getVideoId();
+      LOGGER.debug("First video id {}", videoId);
       LOGGER.debug("Full response {}", response);
-
-
     } catch (GoogleJsonResponseException e) {
 
       e.printStackTrace();
@@ -161,5 +131,25 @@ public class VideoSearch {
 
       t.printStackTrace();
     }
+
+    return getVideoById(videoId);
+  }
+
+  private Video getVideoById(String videoId) {
+
+    Video video = null;
+    try {
+
+      YouTube.Videos.List videosListByIdRequest =
+          youtube.videos().list("snippet");
+      videosListByIdRequest.setId(videoId);
+      VideoListResponse response = videosListByIdRequest.execute();
+      video = response.getItems().get(0);
+      LOGGER.info("VideoListResponse {}", response);
+    } catch (IOException e) {
+
+      e.printStackTrace();
+    }
+    return video;
   }
 }
