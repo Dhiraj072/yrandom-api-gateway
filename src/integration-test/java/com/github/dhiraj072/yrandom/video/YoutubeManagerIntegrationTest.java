@@ -1,16 +1,17 @@
 package com.github.dhiraj072.yrandom.video;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import com.google.api.services.youtube.YouTube;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
-public class YoutubeManagerTest {
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+public class YoutubeManagerIntegrationTest {
 
   private YoutubeManager youtubeManager;
 

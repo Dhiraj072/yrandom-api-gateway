@@ -98,7 +98,7 @@ class YoutubeManager {
    *
    * @return an authorized API client service
    */
-  protected static YouTube getYouTubeService() throws IOException {
+  private static YouTube getYouTubeService() throws IOException {
 
     Credential credential = authorize();
     return new YouTube.Builder(
