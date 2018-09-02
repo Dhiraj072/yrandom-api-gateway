@@ -24,10 +24,12 @@ class YoutubeManager {
   private static YouTube youtube;
 
   @Autowired
-  YoutubeManager(ConfigManager configManager) throws IOException, GeneralSecurityException {
+  YoutubeManager(ConfigManager configManager)
+      throws IOException, GeneralSecurityException {
 
-    LOGGER.info("Using client secrets {}", configManager.getClientSecret());
-    youtube = YoutubeAuthHelper.getAuthorizedYoutubeService(configManager.getClientSecret());
+    String clientSecret = configManager.getClientSecret();
+    LOGGER.info("Using client secrets {}", clientSecret);
+    youtube = YoutubeAuthHelper.getAuthorizedYoutubeService(clientSecret);
   }
 
   Video getRandomYoutubeVideo() {
