@@ -3,18 +3,18 @@ package com.github.dhiraj072.yrandom.video;
 import static io.restassured.RestAssured.when;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
-public class VideoControllerRestAPITest {
+class VideoControllerRestAPITest {
 
   @Test
-  public void testReturnsAGoodRandomVideo() {
+  void testReturnsAGoodRandomVideo() {
 
     when().get("/video/random").then()
         .statusCode(200)

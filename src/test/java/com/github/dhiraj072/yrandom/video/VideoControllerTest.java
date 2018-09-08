@@ -1,27 +1,27 @@
 package com.github.dhiraj072.yrandom.video;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 import com.google.api.services.youtube.model.Video;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-public class VideoControllerTest {
+class VideoControllerTest {
 
   private YoutubeManager youtubeManager;
   private VideoController controller;
 
-  @Before
-  public void setUp() {
+  @BeforeAll
+  void setUp() {
 
     youtubeManager = Mockito.mock(YoutubeManager.class);
     controller = new VideoController(youtubeManager);
   }
 
   @Test
-  public void testGetRandomVideo() {
+  void testGetRandomVideo() {
 
     Video randomVideo = new Video();
     randomVideo.setId("randomId");

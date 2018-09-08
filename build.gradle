@@ -78,5 +78,8 @@ dependencies {
     runtime 'com.h2database:h2'
     testCompile 'io.rest-assured:rest-assured:3.0.0'
     testCompile 'io.rest-assured:json-schema-validator:3.0.0'
-    testCompile 'org.springframework.boot:spring-boot-starter-test'
+    testCompile('org.springframework.boot:spring-boot-starter-test') {
+        exclude group:'junit'
+    }
+    testCompile 'org.junit.jupiter:junit-jupiter-api'
 }
