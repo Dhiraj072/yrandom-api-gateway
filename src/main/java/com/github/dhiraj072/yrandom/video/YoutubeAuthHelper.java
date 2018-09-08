@@ -26,11 +26,6 @@ class YoutubeAuthHelper {
       .getLogger(YoutubeAuthHelper.class);
 
   /**
-   * Application name.
-   */
-  private static final String APPLICATION_NAME = "yrandom";
-
-  /**
    * Directory to store user credentials for this application.
    */
   private static final java.io.File DATA_STORE_DIR = new java.io.File(
@@ -58,14 +53,16 @@ class YoutubeAuthHelper {
    * API client service.
    *
    * @return an authorized API client service
+   * @param appName
    * @param clientSecret
    */
-  private static YouTube getYouTubeService(String clientSecret) throws IOException {
+  private static YouTube getYouTubeService(String appName,
+      String clientSecret) throws IOException {
 
     Credential credential = authorize(clientSecret);
     return new YouTube.Builder(
         HTTP_TRANSPORT, JSON_FACTORY, credential)
-        .setApplicationName(APPLICATION_NAME)
+        .setApplicationName(appName)
         .build();
   }
 
@@ -95,11 +92,12 @@ class YoutubeAuthHelper {
     return credential;
   }
 
-  static YouTube getAuthorizedYoutubeService(String clientSecret)
+  static YouTube getAuthorizedYoutubeService(String appName,
+      String clientSecret)
       throws IOException, GeneralSecurityException {
 
     HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
     DATA_STORE_FACTORY = new FileDataStoreFactory(DATA_STORE_DIR);
-    return getYouTubeService(clientSecret);
+    return getYouTubeService(appName, clientSecret);
   }
 }

@@ -9,8 +9,16 @@ public class ConfigManager {
   @Value("${client.secret}")
   private String clientSecret;
 
+  @Value("${spring.application.name}")
+  private String appName;
+
   public String getClientSecret() {
 
     return clientSecret;
+  }
+
+  public String getAppName() {
+
+    return appName;
   }
 }

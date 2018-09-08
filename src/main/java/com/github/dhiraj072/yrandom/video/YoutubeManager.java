@@ -28,8 +28,9 @@ class YoutubeManager {
       throws IOException, GeneralSecurityException {
 
     String clientSecret = configManager.getClientSecret();
+    String appName = configManager.getAppName();
     LOGGER.info("Using client secrets {}", clientSecret);
-    youtube = YoutubeAuthHelper.getAuthorizedYoutubeService(clientSecret);
+    youtube = YoutubeAuthHelper.getAuthorizedYoutubeService(appName, clientSecret);
   }
 
   Video getRandomYoutubeVideo() {
