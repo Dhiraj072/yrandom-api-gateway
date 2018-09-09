@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
 @Service
 class YoutubeManager {
 
@@ -24,13 +23,10 @@ class YoutubeManager {
   private static YouTube youtube;
 
   @Autowired
-  YoutubeManager(ConfigManager configManager)
+  YoutubeManager(YoutubeAuthHelper youtubeAuthHelper)
       throws IOException, GeneralSecurityException {
 
-    String clientSecret = configManager.getClientSecret();
-    String appName = configManager.getAppName();
-    LOGGER.info("Using client secrets {}", clientSecret);
-    youtube = YoutubeAuthHelper.getAuthorizedYoutubeService(appName, clientSecret);
+    youtube = youtubeAuthHelper.getAuthorizedYoutubeService();
   }
 
   Video getRandomYoutubeVideo() {

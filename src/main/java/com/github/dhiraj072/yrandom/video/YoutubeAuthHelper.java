@@ -1,5 +1,6 @@
 package com.github.dhiraj072.yrandom.video;
 
+import com.github.dhiraj072.yrandom.ConfigManager;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
@@ -19,24 +20,28 @@ import java.util.Collection;
 import java.util.Collections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 class YoutubeAuthHelper {
 
   private static final Logger LOGGER = LoggerFactory
       .getLogger(YoutubeAuthHelper.class);
 
+  private final ConfigManager configManager;
   /**
    * Directory to store user credentials for this application.
    */
-  private static final java.io.File DATA_STORE_DIR = new java.io.File(
+  private final java.io.File DATA_STORE_DIR = new java.io.File(
       System.getProperty("user.home"), ".credentials/java-youtube-api-tests");
 
-  private static FileDataStoreFactory DATA_STORE_FACTORY;
+  private FileDataStoreFactory DATA_STORE_FACTORY;
 
-  private static final JsonFactory JSON_FACTORY = JacksonFactory
+  private final JsonFactory JSON_FACTORY = JacksonFactory
       .getDefaultInstance();
 
-  private static HttpTransport HTTP_TRANSPORT;
+  private HttpTransport HTTP_TRANSPORT;
 
 
   /**
@@ -45,8 +50,14 @@ class YoutubeAuthHelper {
    * If modifying these scopes, delete your previously saved credentials at
    * ~/.credentials/drive-java-quickstart
    */
-  private static final Collection<String> SCOPES = Collections.singletonList(
+  private final Collection<String> SCOPES = Collections.singletonList(
       "https://www.googleapis.com/auth/youtube.force-ssl https://www.googleapis.com/auth/youtubepartner");
+
+  @Autowired
+  public YoutubeAuthHelper(ConfigManager configManager) {
+
+    this.configManager = configManager;
+  }
 
   /**
    * Build and return an authorized API client service, such as a YouTube Data
@@ -56,7 +67,7 @@ class YoutubeAuthHelper {
    * @param appName
    * @param clientSecret
    */
-  private static YouTube getYouTubeService(String appName,
+  private YouTube getYouTubeService(String appName,
       String clientSecret) throws IOException {
 
     Credential credential = authorize(clientSecret);
@@ -72,7 +83,7 @@ class YoutubeAuthHelper {
    * @return an authorized Credential object.
    * @param clientSecret
    */
-  private static Credential authorize(String clientSecret) throws IOException {
+  private Credential authorize(String clientSecret) throws IOException {
 
     // Load client secrets.
     InputStream in = YoutubeManager.class
@@ -92,12 +103,11 @@ class YoutubeAuthHelper {
     return credential;
   }
 
-  static YouTube getAuthorizedYoutubeService(String appName,
-      String clientSecret)
+  YouTube getAuthorizedYoutubeService()
       throws IOException, GeneralSecurityException {
 
     HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
     DATA_STORE_FACTORY = new FileDataStoreFactory(DATA_STORE_DIR);
-    return getYouTubeService(appName, clientSecret);
+    return getYouTubeService(configManager.getAppName(), configManager.getClientSecret());
   }
 }
