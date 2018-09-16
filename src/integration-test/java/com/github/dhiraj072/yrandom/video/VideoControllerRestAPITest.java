@@ -1,7 +1,6 @@
 package com.github.dhiraj072.yrandom.video;
 
 import static io.restassured.RestAssured.when;
-import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,8 +15,7 @@ class VideoControllerRestAPITest {
   @Test
   void testReturnsAGoodRandomVideo() {
 
-    when().get("/video/random").then()
-        .statusCode(200)
-        .assertThat().body(matchesJsonSchemaInClasspath("RestAPI/video.json"));
+    when().get("/yrandom/video/random").then()
+        .statusCode(200);
   }
 }
