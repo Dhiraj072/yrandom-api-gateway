@@ -1,6 +1,7 @@
 package com.github.dhiraj072.yrandom.video;
 
 import com.google.api.services.youtube.model.Video;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -8,9 +9,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/yrandom")
 public class VideoController {
 
+  @Autowired
+  YoutubeServiceProxy youtubeServiceProxy;
+
   @RequestMapping(value = "/video/random")
   Video getRandomVideo() {
 
-    return new Video();
+    return youtubeServiceProxy.getRandomVideo();
   }
 }
