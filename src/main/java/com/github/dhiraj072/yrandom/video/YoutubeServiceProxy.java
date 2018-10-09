@@ -1,6 +1,6 @@
 package com.github.dhiraj072.yrandom.video;
 
-import com.google.api.services.youtube.model.Video;
+import java.util.Map;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -8,5 +8,5 @@ import org.springframework.web.bind.annotation.GetMapping;
 public interface YoutubeServiceProxy {
 
   @GetMapping("/youtube/video/random")
-  Video getRandomVideo();
+  Map<String, Object> getRandomVideo();
 }
