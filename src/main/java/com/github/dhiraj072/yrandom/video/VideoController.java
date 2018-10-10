@@ -15,12 +15,12 @@ public class VideoController {
       LoggerFactory.getLogger(VideoController.class);
 
   @Autowired
-  YoutubeServiceProxy youtubeServiceProxy;
+  private YoutubeServiceProxy youtubeServiceProxy;
 
   /**
    * Get a random video
    * @return Map containing video information, which jackson is able to
-   * serialize to json out of the box
+   * serialize out of the box
    */
   @RequestMapping(value = "/video/random")
   Map<String, Object> getRandomVideo() {
