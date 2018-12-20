@@ -12,10 +12,4 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
 class VideoControllerRestAPITest {
 
-  @Test
-  void testReturnsAGoodRandomVideo() {
-
-    when().get("/yrandom/video/random").then()
-        .statusCode(200);
-  }
 }

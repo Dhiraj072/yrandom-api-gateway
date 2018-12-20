@@ -80,7 +80,7 @@ tasks.withType(Test) {
 }
 
 bootRun {
-    environment SPRING_PROFILES_ACTIVE: environment.SPRING_PROFILES_ACTIVE ?: "dev"
+    environment SPRING_PROFILES_ACTIVE: environment.SPRING_PROFILES_ACTIVE ?: "staging"
 }
 
 ext {
@@ -92,6 +92,7 @@ dependencies {
     compile 'org.springframework.cloud:spring-cloud-starter-openfeign'
     compile 'org.springframework.cloud:spring-cloud-starter-netflix-ribbon'
     compile 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+    compile 'org.springframework.boot:spring-boot-starter-actuator'
     compile 'com.fasterxml.jackson.core:jackson-databind'
     compile 'com.google.apis:google-api-services-youtube:v3-rev205-1.25.0'
     compile 'com.google.api-client:google-api-client:1.25.0'
