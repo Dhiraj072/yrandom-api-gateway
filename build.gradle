@@ -4,11 +4,11 @@ buildscript {
     }
     repositories {
         jcenter()
+        maven { url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
-        classpath(
-                "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}",
-        )
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+        classpath "gradle.plugin.fi.evident.gradle.beanstalk:gradle-beanstalk-plugin:0.2.1"
     }
 }
 
@@ -16,6 +16,7 @@ apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
+apply plugin: 'fi.evident.beanstalk'
 
 group = 'com.github.dhiraj072'
 version = '0.0.1-SNAPSHOT'
@@ -111,5 +112,19 @@ dependencies {
 dependencyManagement {
     imports {
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
+beanstalk {
+    s3Endpoint = "s3-ap-southeast-1.amazonaws.com"
+    beanstalkEndpoint = "elasticbeanstalk.ap-southeast-1.amazonaws.com"
+
+    deployments {
+        // Deploy to an existing env
+        staging {
+            file = tasks.bootJar
+            application = 'yrandom'
+            environment = 'Yrandom-staging'
+        }
     }
 }
