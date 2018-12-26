@@ -94,6 +94,7 @@ dependencies {
     compile 'org.springframework.cloud:spring-cloud-starter-netflix-ribbon'
     compile 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
     compile 'org.springframework.boot:spring-boot-starter-actuator'
+    compile group: 'org.springframework.data', name: 'spring-data-rest-hal-browser', version: '3.0.8.RELEASE'
     compile 'com.fasterxml.jackson.core:jackson-databind'
     compile 'com.google.apis:google-api-services-youtube:v3-rev205-1.25.0'
     compile 'com.google.api-client:google-api-client:1.25.0'
