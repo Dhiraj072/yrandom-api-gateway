@@ -4,6 +4,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,6 +23,7 @@ public class VideoController {
    * @return Map containing video information, which jackson is able to
    * serialize out of the box
    */
+  @CrossOrigin(origins = { "http://localhost:3000", "http://localhost:5000" })
   @RequestMapping(value = "/video/random")
   Map<String, Object> getRandomVideo() {
 
