@@ -8,7 +8,7 @@ buildscript {
     }
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
-        classpath "gradle.plugin.fi.evident.gradle.beanstalk:gradle-beanstalk-plugin:0.2.1"
+        classpath "jp.classmethod.aws:gradle-aws-plugin:0.+"
     }
 }
 
@@ -16,7 +16,11 @@ apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
-apply plugin: 'fi.evident.beanstalk'
+apply plugin: "jp.classmethod.aws.beanstalk"
+ext.artifactId = 'yrandom'
+ext.timestamp = new Date().format("yyyyMMdd'_'HHmmss", TimeZone.default)
+ext.versionDesc = "${version}-${timestamp}"
+ext.defaultEncoding = 'UTF-8'
 
 group = 'com.github.dhiraj072'
 version = '0.0.1-SNAPSHOT'
@@ -116,16 +120,54 @@ dependencyManagement {
     }
 }
 
-beanstalk {
-    s3Endpoint = "s3-ap-southeast-1.amazonaws.com"
-    beanstalkEndpoint = "elasticbeanstalk.ap-southeast-1.amazonaws.com"
+// Requires AWS_SECRET_ACCESS_KEY and AWS_ACCESS_KEY_ID env set
+aws {
+    region = "ap-southeast-1"
+}
 
-    deployments {
-        // Deploy to an existing env
-        staging {
-            file = tasks.bootJar
-            application = 'yrandom'
-            environment = 'Yrandom-staging'
+beanstalk {
+    appName "yrandom"
+    appDesc "yrandom"
+
+    version {
+        label = "yrandom-${versionDesc}"
+        description = "${artifactId} v${version}"
+        bucket = "elasticbeanstalk-${aws.region}-${aws.accountId}"
+        key = "eb-apps/${artifactId}/${artifactId}-${versionDesc}.zip"
+    }
+
+    configurationTemplates {
+        production {
+            optionSettings = file("src/main/eb/production.json")
+            solutionStackName = "64bit Amazon Linux 2018.03 v2.7.8 running Java 8"
         }
     }
+
+    environment {
+        envName = "yrandom"
+        envDesc = "yrandom"
+        templateName = "production"
+        versionLabel = "yrandom-${versionDesc}"
+        tags = [
+                VERSION: "${versionDesc}".toString(),
+                GROUP: "Eng"
+        ]
+    }
 }
+
+task createBundle(type: Zip) {
+    archiveName = jar.archiveName.substring(0, jar.archiveName.length() - 4) + ".zip"
+    from tasks.bootJar
+}
+
+task uploadBundle(type: jp.classmethod.aws.gradle.s3.AmazonS3FileUploadTask, dependsOn: createBundle) {
+    group "AWS"
+    description "Upload ${artifactId} application bundle file to S3."
+
+    bucketName "elasticbeanstalk-${aws.region}-${aws.accountId}"
+    key "eb-apps/${artifactId}/${artifactId}-${versionDesc}.zip"
+    file project.createBundle.archivePath
+    overwrite project.version.endsWith("-SNAPSHOT")
+}
+
+awsEbCreateApplicationVersion.dependsOn uploadBundle

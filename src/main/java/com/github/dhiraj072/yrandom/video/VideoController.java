@@ -23,7 +23,7 @@ public class VideoController {
    * @return Map containing video information, which jackson is able to
    * serialize out of the box
    */
-  @CrossOrigin(origins = { "http://localhost:3000", "http://localhost:5000" })
+  @CrossOrigin(origins = { "http://localhost:3000", "http://localhost:5000", "https://yrandom.herokuapp.com" })
   @RequestMapping(value = "/video/random")
   Map<String, Object> getRandomVideo() {
 
