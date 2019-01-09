@@ -17,6 +17,8 @@ apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: "jp.classmethod.aws.beanstalk"
+
+version = '0.0.1-SNAPSHOT'
 ext.artifactId = 'yrandom'
 ext.timestamp = new Date().format("yyyyMMdd'_'HHmmss", TimeZone.default)
 ext.versionDesc = "${version}-${timestamp}"
