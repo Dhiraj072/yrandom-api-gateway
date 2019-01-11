@@ -35,6 +35,6 @@ public class VideoController {
   @RequestMapping(value = "/test")
   String getTest() {
 
-    return "Hello world changed!";
+    return "Hello world changed again!";
   }
 }
