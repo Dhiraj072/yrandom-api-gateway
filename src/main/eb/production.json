@@ -46,16 +46,6 @@
     },
     {
       "Namespace": "aws:elasticbeanstalk:application:environment",
-      "OptionName": "AWS_ACCESS_KEY_ID",
-      "Value": "PLACEHOLDER"
-    },
-    {
-      "Namespace": "aws:elasticbeanstalk:application:environment",
-      "OptionName": "AWS_SECRET_ACCESS_KEY",
-      "Value": "PLACEHOLDER"
-    },
-    {
-      "Namespace": "aws:elasticbeanstalk:application:environment",
       "OptionName": "YOUTUBE_API_KEY",
       "Value": "PLACEHOLDER"
     }
