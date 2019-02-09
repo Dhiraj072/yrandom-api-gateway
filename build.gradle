@@ -17,6 +17,7 @@ apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: "jp.classmethod.aws.beanstalk"
+apply plugin: 'jacoco'
 
 version = '0.0.1-SNAPSHOT'
 ext.artifactId = 'yrandom'
@@ -54,6 +55,18 @@ task integrationTest(type: Test) {
 check.dependsOn integrationTest
 //Ensure that our unit tests are run before our integration tests
 integrationTest.mustRunAfter test
+
+jacocoTestReport {
+    executionData test, integrationTest
+    reports {
+        xml.enabled
+        xml.destination file('build/reports/jacoco/report.xml')
+        html.enabled
+        html.destination file('build/reports/jacoco/htmlReport')
+    }
+}
+
+check.dependsOn jacocoTestReport
 
 //Configures the compile and runtime configurations for our integration tests
 //and includes the dependencies of the test task.

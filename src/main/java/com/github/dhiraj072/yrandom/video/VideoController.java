@@ -20,6 +20,8 @@ public class VideoController {
 
   /**
    * Get a random video
+   * Allows cross-origin requests from staging/uat localhost ports,
+   * and from prod app deployed in heroku
    * @return Map containing video information, which jackson is able to
    * serialize out of the box
    */
