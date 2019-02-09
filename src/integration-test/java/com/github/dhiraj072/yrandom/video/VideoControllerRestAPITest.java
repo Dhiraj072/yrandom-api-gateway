@@ -5,6 +5,7 @@ import static org.hamcrest.core.IsEqual.equalTo;
 
 import io.restassured.RestAssured;
 import java.util.HashMap;
+import java.util.Map;
 import javax.annotation.Resource;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -40,8 +41,10 @@ class VideoControllerRestAPITest {
 
     RestAssured.port = serverPort;
     MockitoAnnotations.initMocks(this);
-    Mockito.when(youtubeServiceProxy.getRandomVideo()).thenReturn(
-        new HashMap<String, Object>() {{ put ("test", "value"); }} );
+    Map<String, Object> mockResult = new HashMap<>();
+    mockResult.put ("test", "value");
+    Mockito.when(youtubeServiceProxy.getRandomVideo())
+        .thenReturn(mockResult);
   }
 
   @Test

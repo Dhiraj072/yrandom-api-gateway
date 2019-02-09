@@ -59,9 +59,9 @@ integrationTest.mustRunAfter test
 jacocoTestReport {
     executionData test, integrationTest
     reports {
-        xml.enabled
+        xml.enabled true
         xml.destination file('build/reports/jacoco/report.xml')
-        html.enabled
+        html.enabled true
         html.destination file('build/reports/jacoco/htmlReport')
     }
 }
