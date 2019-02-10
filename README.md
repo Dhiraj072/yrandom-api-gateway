@@ -1,6 +1,6 @@
-# Yrandom
+# yrandom-api-gateway
 
-A microservice for getting random youtube videos
+API Gateway for [yrandom-client](https://github.com/Dhiraj072/yrandom-client)
 
 ## Built With
 
