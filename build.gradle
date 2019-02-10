@@ -20,7 +20,7 @@ apply plugin: "jp.classmethod.aws.beanstalk"
 apply plugin: 'jacoco'
 
 version = '0.0.1-SNAPSHOT'
-ext.artifactId = 'yrandom'
+ext.artifactId = 'yrandom-api-gateway'
 ext.timestamp = new Date().format("yyyyMMdd'_'HHmmss", TimeZone.default)
 ext.versionDesc = "${version}-${timestamp}"
 ext.defaultEncoding = 'UTF-8'
@@ -141,11 +141,11 @@ aws {
 }
 
 beanstalk {
-    appName "yrandom"
-    appDesc "yrandom"
+    appName "yrandom-api-gateway"
+    appDesc "yrandom-api-gateway"
 
     version {
-        label = "yrandom-${versionDesc}"
+        label = "yrandom-api-gateway-${versionDesc}"
         description = "${artifactId} v${version}"
         bucket = "elasticbeanstalk-${aws.region}-${aws.accountId}"
         key = "eb-apps/${artifactId}/${artifactId}-${versionDesc}.zip"
@@ -159,10 +159,10 @@ beanstalk {
     }
 
     environment {
-        envName = "yrandom"
-        envDesc = "yrandom"
+        envName = "yrandom-api-gateway"
+        envDesc = "yrandom-api-gateway"
         templateName = "production"
-        versionLabel = "yrandom-${versionDesc}"
+        versionLabel = "yrandom-api-gateway-${versionDesc}"
         tags = [
                 VERSION: "${versionDesc}".toString(),
                 GROUP: "Eng"
