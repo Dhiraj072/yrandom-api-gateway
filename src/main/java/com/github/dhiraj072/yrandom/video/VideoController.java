@@ -33,10 +33,4 @@ public class VideoController {
     LOGGER.info("Got random video {}", videoJson);
     return videoJson;
   }
-
-  @RequestMapping(value = "/test")
-  String getTest() {
-
-    return "Hello world changed again!";
-  }
 }
