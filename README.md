@@ -2,7 +2,7 @@
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/c11a6eb488c24b7ca315b816dbb05e1d)](https://app.codacy.com/app/dhirajbhatt072/yrandom-api-gateway?utm_source=github.com&utm_medium=referral&utm_content=Dhiraj072/yrandom-api-gateway&utm_campaign=Badge_Grade_Dashboard)
 
-API Gateway for [yrandom-client](https://github.com/Dhiraj072/yrandom)
+API Gateway for [yrandom](https://github.com/Dhiraj072/yrandom)
 
 ## Built With
 
